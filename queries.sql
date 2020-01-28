@@ -5,7 +5,9 @@ select * from customers
 where postalcode = '1010'
 
 -- Find the phone number for the supplier with the id 11
-
+select phone
+from suppliers
+where supplierid = '11'
 -- List first 10 orders placed, sorted descending by the order date
 
 -- Find all customers that live in London, Madrid, or Brazil
