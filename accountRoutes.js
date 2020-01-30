@@ -51,8 +51,22 @@ router.post('/', (req, res) => {
         })
 })
 
-router.put('/:id', (req, res) => {
-
+router.put('/:id', validateAccountID, validateAccount, (req, res) => {
+    const id = req.params.id;
+    const changes = {
+        name: req.body.name,
+        budget: req.body.budget
+    };
+    db('accounts')
+    .where({id})
+    .update(changes)
+    .then(post => {
+        res.status(201).json(post)
+    })
+    .catch(err => {
+        console.log(err)
+        res.status(500).json({error: 'Could not update account data'})
+    })
 })
 
 router.delete('/:id', (req, res) => {
@@ -73,14 +87,15 @@ function validateAccountID(req, res, next) {
         })
 }
 
-// function validateAccount(req, res, next) {
-//     const data = req.body;
-//     db('accounts')
-//         .insert(data, 'id')
-//         .then(post => {
-//             const id = post[0];
-//             return db()
-//         })
-// }
+function validateAccount(req, res, next) {
+    const data = req.body;
+    if(!data.name){
+        res.status(400).json({message: 'missing post data'})
+    } else if(!data.budget){
+        res.status(400).json({message: 'missing post data'})
+    } else {
+        next();
+    }
+}
 
 module.exports = router;
