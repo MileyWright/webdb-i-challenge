@@ -69,8 +69,18 @@ router.put('/:id', validateAccountID, validateAccount, (req, res) => {
     })
 })
 
-router.delete('/:id', (req, res) => {
-
+router.delete('/:id', validateAccountID,(req, res) => {
+    const id = req.params.id;
+    db('accounts')
+        .where({id})
+        .del()
+        .then(post => {
+            res.status(200).json(post)
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json({error: 'Could not delete post'})
+        })
 })
 
 //custom middleware
