@@ -15,7 +15,7 @@ router.get('/', (req,res) => {
 })
 
 // GET request /accounts
-router.get('/:id', (req, res) => {
+router.get('/:id', validateAccountID, (req, res) => {
     const id = req.params.id;
     db('accounts')
     .where({'id': id})
@@ -39,6 +39,18 @@ router.delete('/:id', (req, res) => {
 
 })
 
-
+//custom middleware
+function validateAccountID(req, res, next) {
+    const id = req.params.id;
+    db('accounts')
+        .where({'id': id})
+        .then(account => {
+            if(account == ''){
+                res.status(400).json({error: 'The specified ID does not exist'})
+            } else{
+                next();
+            }
+        })
+}
 
 module.exports = router;
