@@ -20,7 +20,7 @@ router.get('/:id', validateAccountID, (req, res) => {
     db('accounts')
     .where({'id': id})
     .then(account => {
-        res.status(200).json({"account deleted"})
+        res.status(200).json(account)
     })
     .catch(err => {
         res.status(500).json({error: 'can not retrieve account by ID'})
@@ -75,7 +75,7 @@ router.delete('/:id', validateAccountID,(req, res) => {
         .where({id})
         .del()
         .then(post => {
-            res.status(200).json(post)
+            res.status(200).json({'account deleted'})
         })
         .catch(err => {
             console.log(err)
